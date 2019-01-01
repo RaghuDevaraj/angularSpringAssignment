@@ -1,0 +1,11 @@
+.input-group>.textbox {
+    max-width: 385px;
+    border-radius: .25rem;
+}
+.input-group>.small-textbox {
+    max-width: 190px;
+    border-radius: .25rem;
+}
+.sort {
+    min-width: 0px;
+}

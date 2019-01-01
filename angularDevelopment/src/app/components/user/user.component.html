@@ -1,0 +1,71 @@
+<article>
+    <form [formGroup]="userForm">
+      <div class="col-md-12">
+          <div id="add-section">
+             <div class="input-group">
+                <label>First Name:</label>
+                <input type="text" class="form-control textbox" formControlName="firstName" maxlength="25"/>                
+             </div>
+             <div *ngIf="formErrors.firstName">
+                <label class="text-danger">{{formErrors.firstName}}</label>
+            </div>
+             <br/>
+             <div class="input-group">
+                <label>Last Name:</label>
+                <input type="text" class="form-control textbox" formControlName="lastName" maxlength="25"/>
+             </div>
+             <div *ngIf="formErrors.lastName">
+                <label class="text-danger">{{formErrors.lastName}}</label>
+            </div>
+             <br/>
+             <div class="input-group">
+                <label>Employee ID:</label>
+                <input type="text" class="form-control small-textbox" formControlName="employeeID" maxlength="8"/>
+             </div>
+             <div *ngIf="formErrors.employeeID">
+                <label class="text-danger">{{formErrors.employeeID}}</label>
+            </div>
+             <br/>
+             <div class="col-md-7">
+                 <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!userForm.dirty" (click)="reset()">Reset</button>
+                 <button type="button" class="btn btn-primary float-right ml-1" [disabled]="userForm.invalid" (click)="addUpdateUser()">{{isEdit ? 'Update' : 'Add'}}</button>
+             </div>
+          </div>
+          <div id="view-section">
+            <div class="input-group">
+                <input type="search" class="form-control small-textbox" formControlName="searchKey" maxlength="25"/>
+                <label class=" sort pr-2 pl-5 mt-1">Sort:</label>
+                <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('fn')">First Name</button>
+                <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('ln')">Last Name</button>
+                <button type="button" class="btn btn-secondary btn-sm" (click)="sortUser('id')">ID</button>
+            </div> 
+            <hr>
+            <br/> 
+            <div *ngFor="let userDetail of userDetails; index as i;">
+                <div class="input-group mb-2">
+                    <div class="col-md-5 p-0 pr-3">
+                        <input type="text" class="form-control textbox" value="{{userDetail.firstName}}" readonly/>    
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <button type="button" class="btn btn-primary ml-2" (click)="editUser(i)">Edit</button>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="col-md-5 p-0 pr-3">
+                        <input type="text" class="form-control textbox" value="{{userDetail.lastName}}" readonly/>    
+                    </div>
+                    <div class="col-md-4 p-0">
+                        <button type="button" class="btn btn-primary ml-2" (click)="deleteUser(i)">Delete</button>
+                    </div>
+                </div>
+                <div class="input-group mb-2">
+                    <div class="col-md-5 p-0 pr-3">
+                        <input type="text" class="form-control textbox" value="{{userDetail.employeeID}}" readonly/>    
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>          
+    </form>
+  </article>
+  
