@@ -1,0 +1,13 @@
+.input-group>.textbox {
+    max-width: 460px;
+    border-radius: .25rem;
+}
+.form-control-range {
+    width: 45%;
+}
+input[type='date'] {
+    border-radius: .25rem;    
+}
+.sort {
+    min-width: 0px;
+}

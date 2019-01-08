@@ -27,40 +27,55 @@
             </div>
              <br/>
              <div class="col-md-7">
-                 <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!userForm.dirty" (click)="reset()">Reset</button>
-                 <button type="button" class="btn btn-primary float-right ml-1" [disabled]="userForm.invalid" (click)="addUpdateUser()">{{isEdit ? 'Update' : 'Add'}}</button>
+                 <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!userForm.dirty" (click)="reset()" id="reset">Reset</button>
+                 <button type="button" class="btn btn-primary float-right ml-1" [disabled]="userForm.invalid" (click)="addUpdateUser()" id="addUser">{{isEdit ? 'Update' : 'Add'}}</button>
              </div>
           </div>
           <div id="view-section">
             <div class="input-group">
-                <input type="search" class="form-control small-textbox" formControlName="searchKey" maxlength="25"/>
-                <label class=" sort pr-2 pl-5 mt-1">Sort:</label>
-                <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('fn')">First Name</button>
-                <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('ln')">Last Name</button>
-                <button type="button" class="btn btn-secondary btn-sm" (click)="sortUser('id')">ID</button>
+                <label>User Details</label>
+            </div>            
+            <div class="input-group">
+                <div>
+                    <input type="search" class="form-control small-textbox" formControlName="searchKey" maxlength="25" placeholder="search user..."/>
+                </div>
+                <div>
+                    <label class="sort pr-2 pl-5 mt-1">Sort:</label>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('fn')">First Name</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortUser('ln')">Last Name</button>
+                    <button type="button" class="btn btn-secondary btn-sm" (click)="sortUser('id')">ID</button>
+                </div>
             </div> 
             <hr>
             <br/> 
-            <div *ngFor="let userDetail of userDetails; index as i;">
-                <div class="input-group mb-2">
-                    <div class="col-md-5 p-0 pr-3">
-                        <input type="text" class="form-control textbox" value="{{userDetail.firstName}}" readonly/>    
+            <div id="userInfo">
+                <div *ngFor="let userDetail of userDetails; index as i;" id="userDetails" class="col-md-7 col-sm-12">
+                    <div class="input-group mb-2">
+                        <div class="col-md-9 col-sm-10 p-0 pr-3">
+                            <input type="text" class="form-control textbox" value="{{userDetail.firstName}}" readonly/>    
+                        </div>
+                        <div class="col-md-2 col-sm-2 p-0">
+                            <button type="button" class="btn btn-primary ml-2 mini-button" (click)="editUser(i)">
+                                <span class="d-sm-none d-md-block">Edit</span>
+                                <i class="fa fa-edit d-sm-block d-md-none"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-md-4 p-0">
-                        <button type="button" class="btn btn-primary ml-2" (click)="editUser(i)">Edit</button>
+                    <div class="input-group mb-2">
+                        <div class="col-md-9 col-sm-10 p-0 pr-3">
+                            <input type="text" class="form-control textbox" value="{{userDetail.lastName}}" readonly/>    
+                        </div>
+                        <div class="col-md-2 col-sm-2 p-0">
+                            <button type="button" class="btn btn-primary ml-2 mini-button" (click)="deleteUser(i)">
+                                    <span class="d-sm-none d-md-block">Delete</span>
+                                    <i class="fa fa-trash d-sm-block d-md-none"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="col-md-5 p-0 pr-3">
-                        <input type="text" class="form-control textbox" value="{{userDetail.lastName}}" readonly/>    
-                    </div>
-                    <div class="col-md-4 p-0">
-                        <button type="button" class="btn btn-primary ml-2" (click)="deleteUser(i)">Delete</button>
-                    </div>
-                </div>
-                <div class="input-group mb-2">
-                    <div class="col-md-5 p-0 pr-3">
-                        <input type="text" class="form-control textbox" value="{{userDetail.employeeID}}" readonly/>    
+                    <div class="input-group mb-2">
+                        <div class="col-md-9 col-sm-10 p-0 pr-3">
+                            <input type="text" class="form-control textbox" value="{{userDetail.employeeID}}" readonly/>    
+                        </div>
                     </div>
                 </div>
             </div>

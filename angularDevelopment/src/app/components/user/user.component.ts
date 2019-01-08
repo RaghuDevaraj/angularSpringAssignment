@@ -44,7 +44,7 @@ export class UserComponent implements OnInit{
         // listen to the search key value and filter the user details
         //  wait for 500 ms to react
         this.userForm.get("searchKey").valueChanges
-                     .pipe(debounceTime(300))
+                     .pipe(debounceTime(50))
                      .subscribe(key => {
                         if(key) {
                             this.userDetails = this.userDetails.filter(user => {return (user.firstName.indexOf(key) != -1 ||

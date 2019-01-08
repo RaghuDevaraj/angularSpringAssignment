@@ -1,0 +1,30 @@
+.title {
+    color: #337AB7;
+}
+.navbar-brand b {
+    background-color: #5F9EA0;
+    color: #fff;
+    padding: 5px;
+    border-radius: .25rem;
+}
+nav {
+    background-color: #0275BE;
+}
+.navbar-toggler {
+    background-color: #00bfff;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #fff;
+}
+a.active {
+    color: #0275BE!important;
+    background-color: #fff;
+    font-weight: bold;
+    border-radius: .25rem;
+}
+
+@media screen and (max-width: 768px) {
+    a.active {
+        padding-left: 20px;
+    }
+}

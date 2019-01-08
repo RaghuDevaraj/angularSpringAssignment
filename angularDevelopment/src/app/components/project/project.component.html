@@ -1,0 +1,87 @@
+<article>
+        <form [formGroup]="projectForm">
+          <div class="col-md-12">
+              <div id="add-section">
+                 <div class="input-group">
+                    <label>Project:</label>
+                    <input type="text" class="form-control textbox" formControlName="projectName" maxlength="25"/>                
+                 </div>
+                 <div *ngIf="formErrors.projectName">
+                    <label class="text-danger">{{formErrors.projectName}}</label>
+                </div>
+                 <br/>
+                 <div class="input-group">
+                    <input type="checkbox" formControlName="dateCheck" class="m-2"/>
+                    <label class="pr-3">Set Start and End Date</label>
+                    <input type="date" formControlName="startDate" class="mr-2"/>
+                    <input type="date" formControlName="endDate"/>
+                 </div>
+                 <div class="input-group">
+                    <label>Priority:</label>
+                    <span class="m-2">0</span>
+                    <input type="range" class="form-control-range" formControlName="priority" min="0" max="30"/>
+                    <span class="m-2">30</span>
+                 </div>                 
+                 <br/>
+                 <div class="input-group">
+                    <label>Manager:</label>
+                    <input type="text" class="form-control textbox" formControlName="manager"/>
+                 </div>
+                 <div *ngIf="formErrors.manager">
+                    <label class="text-danger">{{formErrors.manager}}</label>
+                </div>
+                <br/>
+                 <div class="col-md-8">
+                     <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!projectForm.dirty" (click)="reset()">Reset</button>
+                     <button type="button" class="btn btn-primary float-right ml-1" [disabled]="projectForm.invalid" (click)="addUpdateProject()">{{isEdit ? 'Update' : 'Add'}}</button>
+                 </div>
+              </div>
+            <div id="view-section">                
+                <div class="input-group">
+                    <label>Search:</label>
+                    <input type="search" class="form-control textbox" formControlName="searchKey" maxlength="25"/>
+                </div>
+                <br/>                
+                <div class="input-group">
+                    <label class=" sort pr-2 pl-5 mt-1">Sort By:</label>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('sd')">Start Date</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('ed')">End Date</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('p')">Priority</button>
+                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('c')">Completed</button>
+                </div> 
+                <br/> 
+                <div *ngFor="let projectDetail of projectDetails; index as i;">
+                    <div class="card-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <label class="card-text">Project:</label><br/>
+                                <label class="card-text"><b>{{projectDetail.projectName}}</b></label><br/>
+                                <div class="input-group">
+                                    <label class="card-text">No of Tasks: <b>{{projectDetail.numberOfTasks}}</b></label>
+                                    <label class="card-text">Completed: <b>{{projectDetail.completedTasks}}</b></label>
+                                </div>
+                                <div class="input-group">
+                                    <label class="card-text">Start Date: <b>{{projectDetail.startDate}}</b></label>
+                                    <label class="card-text">End Date: <b>{{projectDetail.endDate}}</b></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <label class="card-text">Priroity:</label><br/>
+                                <label class="card-text"><b>{{projectDetail.priority}}</b></label>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-primary" (click)="editProject()">Update</button><br/>
+                                <button type="button" class="btn btn-primary" (click)="suspendProject()">Suspend</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>          
+    </form>
+</article>
+      

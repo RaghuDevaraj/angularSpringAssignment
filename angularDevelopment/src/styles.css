@@ -2,3 +2,32 @@
 label, .btn-primary {
     min-width: 100px;
 }
+
+@media screen and (max-width: 768px) {
+    .col-sm-2 {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+    }
+    .col-sm-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+    .col-sm-8 {
+        flex: 0 0 66.666667%;
+        max-width: 66.666667%;
+    }
+    .col-sm-10 {
+        flex: 0 0 83.333333%;
+        max-width: 83.333333%;
+    }
+    .d-sm-none {
+        display: none;
+    }
+    .d-sm-block {
+        display: inline-block;
+    }
+    .mini-button {
+        min-width: 40px;
+        max-width: 40px;
+    }
+}
