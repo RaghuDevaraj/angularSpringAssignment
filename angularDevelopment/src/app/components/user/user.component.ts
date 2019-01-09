@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, map } from 'rxjs/operators';
 
 import { ProjectManagerService } from 'src/app/services/project-manager.service';
 import { userMessages } from 'src/app/shared/messages/user.messages';
 import { User } from 'src/app/models/user.model';
+import { ConfirmationPopupComponent } from 'src/app/shared/components/confirmation-popup/confirmation-popup.component';
 
 @Component({
   selector: 'app-user',
@@ -19,6 +20,12 @@ export class UserComponent implements OnInit{
     userDetailsCopy: User[] = [];
     isEdit: boolean;
     editIndex: number;
+    // popup variables
+    popupmessage: string;
+    paramsArray: string[] = [];
+    // popup component
+    @ViewChild(ConfirmationPopupComponent)
+    private popup: ConfirmationPopupComponent;
 
     // dependency injection
     constructor(private fb: FormBuilder, private service: ProjectManagerService){}
@@ -125,12 +132,22 @@ export class UserComponent implements OnInit{
         this.userForm.get("firstName").reset(userInfo.firstName);
         this.userForm.get("lastName").reset(userInfo.lastName);
         this.userForm.get("employeeID").reset(userInfo.employeeID);
+        this.userForm.markAsDirty();
         this.isEdit= true;
         this.editIndex= index;
     }
 
     // method to delete the user
     deleteUser(index: number): void {
+        const userInfo: User  = this.userDetails[index];
+        this.popupmessage = 'user-delete';
+        this.paramsArray.push((userInfo.firstName + ' ' + userInfo.lastName).toUpperCase());
 
+        // display the confirmation popup b4 deleting the user info.
+        this.popup.showConfirmationPopup().then((result) => {
+
+        }, (reason) => {
+            // user closed the popup by clicking cross or cancel button
+        })
     }
 }

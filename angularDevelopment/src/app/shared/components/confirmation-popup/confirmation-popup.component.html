@@ -1,0 +1,13 @@
+<ng-template #confirmationPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+        <i class="fa fa-times-circle close" aria-hidden="true" (click)="d('Cross click')"></i>
+    </div>
+    <div class="modal-body">
+        <span>{{message}}</span>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="c('confirm')">OK</button>
+        <button type="button" class="btn btn-primary" (click)="d('cancel')">Cancel</button>
+    </div>
+</ng-template>

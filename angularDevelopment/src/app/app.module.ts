@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { ViewTaskComponent } from 'src/app/components/view-task/view-task.compon
 import { ProjectManagerService } from 'src/app/services/project-manager.service';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
+import { ConfirmationPopupComponent } from 'src/app/shared/components/confirmation-popup/confirmation-popup.component';
 
 @NgModule({
   declarations: [
@@ -20,10 +22,12 @@ import { FooterComponent } from 'src/app/shared/components/footer/footer.compone
     AddTaskComponent,
     ViewTaskComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ConfirmationPopupComponent
   ],
   imports: [
     BrowserModule,
+    NgbModule.forRoot(),
     AppRoutingModule,
     ReactiveFormsModule
   ],
