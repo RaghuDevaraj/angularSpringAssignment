@@ -6,19 +6,11 @@
     max-width: 190px;
     border-radius: .25rem;
 }
-#view-section > div:first-child {
-    background-color: #0275BE;
-    color: #fff;
-    border-radius: 0.25rem;
-    padding-left: 10px;
-    padding-top: 5px;
-    margin-bottom: 10px;
-}
 .sort {
     min-width: 0px;
 }
 #userInfo {
-    height: 600px;
+    max-height: 600px;
     overflow-y: auto;
 }
 #userDetails {

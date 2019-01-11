@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +13,7 @@ import { ProjectManagerService } from 'src/app/services/project-manager.service'
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { FooterComponent } from 'src/app/shared/components/footer/footer.component';
 import { ConfirmationPopupComponent } from 'src/app/shared/components/confirmation-popup/confirmation-popup.component';
+import { ModalPopupComponent } from 'src/app/shared/components/modal-popup/modal-popup.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ConfirmationPopupComponent } from 'src/app/shared/components/confirmati
     ViewTaskComponent,
     HeaderComponent,
     FooterComponent,
-    ConfirmationPopupComponent
+    ConfirmationPopupComponent,
+    ModalPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,7 @@ import { ConfirmationPopupComponent } from 'src/app/shared/components/confirmati
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [ProjectManagerService],
+  providers: [ProjectManagerService, NgbActiveModal],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

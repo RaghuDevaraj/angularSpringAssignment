@@ -1,0 +1,32 @@
+<ng-template #modalPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+        <i class="fa fa-times-circle close" aria-hidden="true" (click)="d('Cross click')"></i>
+    </div>
+    <form [formGroup]="modalForm">
+        <div class="modal-body">
+            <div *ngIf="key == 'user'">
+                <div class="input-group">
+                    <div class="col-md-1 col-sm-1"></div>
+                    <div class="col-md-4 col-sm-4">Employee ID</div>
+                    <div class="col-md-7 col-sm-7">Name</div>
+                </div>
+                <div *ngFor="let user of arrayInfo;" class="input-group">
+                    <div class="col-md-1 col-sm-1">
+                        <input type="radio" formControlName="optionSelected" name="optionSelected" value="{{user.id}}">
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <label>{{user.employeeID}}</label>
+                    </div>
+                    <div class="col-md-7 col-sm-7">
+                        <label>{{user.firstName}} {{user.lastName}}</label>
+                    </div>
+                </div>
+            </div>           
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="c(modalForm.controls['optionSelected'].value)" [disabled]="modalForm.invalid">OK</button>
+            <button type="button" class="btn btn-primary" (click)="d('cancel')">Cancel</button>
+        </div>
+    </form>
+</ng-template>

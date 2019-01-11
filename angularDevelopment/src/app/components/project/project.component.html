@@ -11,12 +11,20 @@
                 </div>
                  <br/>
                  <div class="input-group">
-                    <input type="checkbox" formControlName="dateCheck" class="m-2"/>
-                    <label class="pr-3">Set Start and End Date</label>
-                    <input type="date" formControlName="startDate" class="mr-2"/>
-                    <input type="date" formControlName="endDate"/>
-                 </div>
-                 <div class="input-group">
+                     <div>
+                        <input type="checkbox" formControlName="dateCheck" class="m-2"/>
+                        <label class="pr-3">Set Start and End Date</label>
+                     </div>
+                     <div>
+                        <input type="date" formControlName="startDate" class="mr-2"/>
+                        <input type="date" formControlName="endDate"/>
+                        <div *ngIf="formErrors.startDate || formErrors.endDate">
+                            <label class="text-danger">{{formErrors.startDate}}</label>
+                            <label class="text-danger">{{formErrors.endDate}}</label>
+                        </div>
+                     </div>
+                    </div>
+                 <div class="input-group mt-3">
                     <label>Priority:</label>
                     <span class="m-2">0</span>
                     <input type="range" class="form-control-range" formControlName="priority" min="0" max="30"/>
@@ -25,21 +33,22 @@
                  <br/>
                  <div class="input-group">
                     <label>Manager:</label>
-                    <input type="text" class="form-control textbox" formControlName="manager"/>
-                 </div>
-                 <div *ngIf="formErrors.manager">
-                    <label class="text-danger">{{formErrors.manager}}</label>
-                </div>
+                    <input type="text" class="form-control medium-textbox" formControlName="manager" readonly/>
+                    <button type="button" class="btn btn-primary ml-3" (click)="searchUser()">Search</button>
+                 </div>                 
                 <br/>
                  <div class="col-md-8">
                      <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!projectForm.dirty" (click)="reset()">Reset</button>
                      <button type="button" class="btn btn-primary float-right ml-1" [disabled]="projectForm.invalid" (click)="addUpdateProject()">{{isEdit ? 'Update' : 'Add'}}</button>
                  </div>
               </div>
-            <div id="view-section">                
+            <div id="view-section">     
+                <div class="input-group">
+                    <label>Project Details</label>
+                </div>           
                 <div class="input-group">
                     <label>Search:</label>
-                    <input type="search" class="form-control textbox" formControlName="searchKey" maxlength="25"/>
+                    <input type="search" class="form-control textbox" formControlName="searchKey" maxlength="25" placeholder="search project..."/>
                 </div>
                 <br/>                
                 <div class="input-group">
@@ -49,39 +58,44 @@
                     <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('p')">Priority</button>
                     <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('c')">Completed</button>
                 </div> 
+                <hr/>
                 <br/> 
-                <div *ngFor="let projectDetail of projectDetails; index as i;">
-                    <div class="card-group">
-                        <div class="card">
-                            <div class="card-body">
-                                <label class="card-text">Project:</label><br/>
-                                <label class="card-text"><b>{{projectDetail.projectName}}</b></label><br/>
-                                <div class="input-group">
-                                    <label class="card-text">No of Tasks: <b>{{projectDetail.numberOfTasks}}</b></label>
-                                    <label class="card-text">Completed: <b>{{projectDetail.completedTasks}}</b></label>
-                                </div>
-                                <div class="input-group">
-                                    <label class="card-text">Start Date: <b>{{projectDetail.startDate}}</b></label>
-                                    <label class="card-text">End Date: <b>{{projectDetail.endDate}}</b></label>
+                <div id="projectInfo">
+                    <div *ngFor="let projectDetail of projectDetails; index as i;">
+                        <div class="card-group col-md-12">
+                            <div class="card col-md-6 border-right-0">
+                                <div class="card-body">
+                                    <label class="card-text">Project:</label><br/>
+                                    <label class="card-text"><b>{{projectDetail.projectName}}</b></label><br/>
+                                    <div class="input-group">
+                                        <label class="card-text projectLabel">No of Tasks: <b>{{projectDetail.numberOfTasks}}</b></label>
+                                        <label class="card-text projectLabel">Completed: <b>{{projectDetail.completedTasks}}</b></label>
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="card-text projectLabel">Start Date: <b>{{projectDetail.startDate | date: 'MM/dd/yyyy'}}</b></label>
+                                        <label class="card-text projectLabel">End Date: <b>{{projectDetail.endDate | date: 'MM/dd/yyyy'}}</b></label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <label class="card-text">Priroity:</label><br/>
-                                <label class="card-text"><b>{{projectDetail.priority}}</b></label>
+                            <div class="card col-md-1 p-0 border-right-0">
+                                <div class="card-body pl-1">
+                                    <label class="card-text">Priroity:</label><br/>
+                                    <label class="card-text priorityLabel"><b>{{projectDetail.priority}}</b></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <button type="button" class="btn btn-primary" (click)="editProject()">Update</button><br/>
-                                <button type="button" class="btn btn-primary" (click)="suspendProject()">Suspend</button>
+                            <div class="card col-md-2">
+                                <div class="card-body col-sm-12">
+                                    <button type="button" class="btn btn-primary mb-3 mt-3 col-sm-5" (click)="editProject(i)" id="update">Update</button>
+                                    <button type="button" class="btn btn-primary col-sm-5" (click)="suspendProject()">Suspend</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>          
     </form>
 </article>
+<app-modal-popup [key]="popuptitle" [arrayInfo]="users"></app-modal-popup>
       

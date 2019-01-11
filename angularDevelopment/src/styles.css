@@ -2,23 +2,67 @@
 label, .btn-primary {
     min-width: 100px;
 }
+#view-section > div:first-child {
+    background-color: #0275BE;
+    color: #fff;
+    border-radius: 0.25rem;
+    padding-left: 10px;
+    padding-top: 5px;
+    margin-bottom: 10px;
+}
 
 @media screen and (max-width: 768px) {
+    form div[class*="col-sm"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .col-sm-1 {
+        flex: 0 0 8.3333335%;
+        max-width: 8.3333335%;
+    }
     .col-sm-2 {
         flex: 0 0 16.666667%;
         max-width: 16.666667%;
+    }
+    .col-sm-3 {
+        flex: 0 0 25.0000005%;
+        max-width: 25.0000005%;
     }
     .col-sm-4 {
         flex: 0 0 33.333333%;
         max-width: 33.333333%;
     }
+    .col-sm-5 {
+        flex: 0 0 41.6666675%;
+        max-width: 41.6666675%;
+    }
+    .col-sm-6 {
+        flex: 0 0 50.000001%;
+        max-width: 50.000001%;
+    }
+    .col-sm-7 {
+        flex: 0 0 58.3333345%;
+        max-width: 58.3333345%;
+    }
     .col-sm-8 {
         flex: 0 0 66.666667%;
         max-width: 66.666667%;
     }
+    .col-sm-9 {
+        flex: 0 0 75.0000015%;
+        max-width: 75.0000015%;
+    }
     .col-sm-10 {
         flex: 0 0 83.333333%;
         max-width: 83.333333%;
+    }
+    .col-sm-11 {
+        flex: 0 0 91.6666685%;
+        max-width: 91.6666685%;
+    }
+    .col-sm-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
     }
     .d-sm-none {
         display: none;
