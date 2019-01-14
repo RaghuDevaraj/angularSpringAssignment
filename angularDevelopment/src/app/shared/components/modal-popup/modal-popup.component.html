@@ -22,6 +22,34 @@
                         <label>{{user.firstName}} {{user.lastName}}</label>
                     </div>
                 </div>
+            </div> 
+            <div *ngIf="key == 'project'">
+                <div class="input-group">
+                    <div class="col-md-1 col-sm-1"></div>
+                    <div class="col-md-7 col-sm-7">Project Name</div>
+                </div>
+                <div *ngFor="let project of arrayInfo;" class="input-group">
+                    <div class="col-md-1 col-sm-1">
+                        <input type="radio" formControlName="optionSelected" name="optionSelected" value="{{project.id}}">
+                    </div>                    
+                    <div class="col-md-7 col-sm-7">
+                        <label>{{project.projectName}}</label>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="key == 'parentTask'">
+                <div class="input-group">
+                    <div class="col-md-1 col-sm-1"></div>
+                    <div class="col-md-7 col-sm-7">Task Name</div>
+                </div>
+                <div *ngFor="let parent of arrayInfo;" class="input-group">
+                    <div class="col-md-1 col-sm-1">
+                        <input type="radio" formControlName="optionSelected" name="optionSelected" value="{{parent.taskID}}">
+                    </div>                    
+                    <div class="col-md-7 col-sm-7">
+                        <label>{{parent.taskName}}</label>
+                    </div>
+                </div>
             </div>           
         </div>
         <div class="modal-footer">

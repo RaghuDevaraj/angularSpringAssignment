@@ -22,28 +22,34 @@ export class DateValidator {
     //  to check the date is maximum than the supplied date.
     static maximumDate = (date1: string, date2: string) => {
         return (group: FormGroup) => {
+            let errors = group.controls[date1].errors;
             if( new Date(group.controls[date1].value).getTime() >= new Date(group.controls[date2].value).getTime()) {
-                let errors = group.controls[date1].errors;
-                errors ? errors : (errors = {});
+                errors ? errors : (errors = {});            
                 errors['maxDate'] = true;
                 group.controls[date1].setErrors(errors);
                 return {'maxDate': true};
-            }
-            return null;
+            } else {
+                errors && errors.maxDate ? delete errors.maxDate : '';
+                group.controls[date1].setErrors(errors);
+                return null;
+            }     
         }
     }    
 
     //  to check the date is maximum than the supplied date.
     static minimumDate = (date1: string, date2: string) => {
         return (group: FormGroup) => {
+            let errors = group.controls[date2].errors;
             if( new Date(group.controls[date2].value).getTime() <= new Date(group.controls[date1].value).getTime()) {
-                let errors = group.controls[date2].errors;
-                errors ? errors : (errors = {});
+                errors ? errors : (errors = {});           
                 errors['minimumDate'] = true;
                 group.controls[date2].setErrors(errors);
                 return {'minimumDate': true};
+            } else {
+                errors && errors.minimumDate ? delete errors.minimumDate : '';
+                group.controls[date2].setErrors(errors);
+                return null;
             }
-            return null;
         }
     }
 }

@@ -9,7 +9,7 @@ export const projectMessages = {
         "required": "Start Date is required.",
         "date": "Enter a valid Start Date.",
         "minDate": "Start Date cannot be lesser than current date.",
-        "maxDate": "Start Date should be lesser than end date"
+        "maxDate": "Start Date should be lesser than end date."
     },
     "endDate":{
         "required": "End Date is required.",

@@ -1,0 +1,28 @@
+.input-group>.textbox {
+    max-width: 460px;
+    border-radius: .25rem;
+}
+.input-group>.medium-textbox {
+    max-width: 345px;
+    border-radius: .25rem;
+}
+#parentTaskCheck {
+	margin-left: 6rem;
+}
+.form-control-range {
+    width: 38%;
+}
+input[type='date'] {
+    border-radius: .25rem;    
+}
+@media screen and (max-width: 768px) {
+    label {
+        min-width: 70px;
+    }
+    input[type="date"] {
+        font-size: 14px;
+    }
+    .form-control-range {
+        width: 57%;
+    }
+}

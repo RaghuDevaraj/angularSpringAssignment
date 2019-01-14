@@ -38,7 +38,7 @@
                  </div>                 
                 <br/>
                  <div class="col-md-8">
-                     <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!projectForm.dirty" (click)="reset()">Reset</button>
+                     <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" (click)="reset()">Reset</button>
                      <button type="button" class="btn btn-primary float-right ml-1" [disabled]="projectForm.invalid" (click)="addUpdateProject()">{{isEdit ? 'Update' : 'Add'}}</button>
                  </div>
               </div>
