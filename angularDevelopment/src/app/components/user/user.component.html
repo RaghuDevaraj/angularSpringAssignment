@@ -26,8 +26,8 @@
                 <label class="text-danger">{{formErrors.employeeID}}</label>
             </div>
              <br/>
-             <div class="col-md-7">
-                 <button type="button" class="btn btn-primary float-right ml-1 mr-4 mb-3" [disabled]="!userForm.dirty" (click)="reset()" id="reset">Reset</button>
+             <div class="col-md-6">
+                 <button type="button" class="btn btn-primary float-right ml-1 mr-5 mb-3" [disabled]="!userForm.dirty" (click)="reset()" id="reset">Reset</button>
                  <button type="button" class="btn btn-primary float-right ml-1" [disabled]="userForm.invalid" (click)="addUpdateUser()" id="addUser">{{isEdit ? 'Update' : 'Add'}}</button>
              </div>
           </div>

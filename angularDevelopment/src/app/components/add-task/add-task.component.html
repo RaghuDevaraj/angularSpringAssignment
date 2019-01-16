@@ -56,8 +56,8 @@
                     <button type="button" class="btn btn-primary ml-3" (click)="searchUser()" [disabled]="isParentTask || editIndex">Search</button>
                  </div>                 
                 <br/>
-                 <div class="col-md-5">
-                     <button type="button" class="btn btn-primary float-right ml-1" (click)="reset()">Reset</button>
+                 <div class="col-md-7">
+                     <button type="button" class="btn btn-primary float-right ml-1" (click)="reset()" id="resetButton">Reset</button>
                      <button type="button" class="btn btn-primary float-right" [disabled]="addTaskForm.invalid" (click)="addUpdateProject()">{{editIndex ? 'Update' : 'Add'}}</button>
                  </div>
                  <br/><br/>
