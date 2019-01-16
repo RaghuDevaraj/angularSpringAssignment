@@ -1,0 +1,28 @@
+.input-group>.medium-textbox {
+    max-width: 345px;
+    border-radius: .25rem;
+}
+.sort {
+    min-width: 0px;
+}
+#task-block{
+	max-height: 600px;
+	overflow-y: auto;
+}
+#task-details {
+	padding: 10px;
+	border: 1px solid cadetblue;
+	border-radius: 0.25rem;
+}
+@media screen and (max-width: 768px) {
+    label {
+        min-width: 70px;
+    }    
+    .sort {
+        padding-left: 0px!important;
+    }
+    .btn-sm {
+        padding: .1rem .1rem;
+        font-size: .65rem;
+    }   
+}

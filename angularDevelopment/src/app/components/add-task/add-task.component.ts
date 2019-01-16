@@ -44,7 +44,7 @@ export class AddTaskComponent {
     // dependency injection
     constructor(private fb: FormBuilder, private service: ProjectManagerService,private route: ActivatedRoute){
         
-        this.projects.push(new Project("1","Anthem","","","","",4,""));
+        this.projects.push(new Project("1","Anthem","","","","",4,"",));
         this.projects.push(new Project("2","Aetna","","","","",1,""));
         this.projects.push(new Project("3","Toyota","","","","",2,""));
         this.projects.push(new Project("4","Cigna","","","","",3,""));
@@ -63,11 +63,12 @@ export class AddTaskComponent {
                     "3",
                     "Pattern test",         
                     false,
-                    "25",
+                    25,
                     "2",
                     "2019-12-19",
                     "2019-12-30",
-                    "2"
+                    "2",
+                    ""
                 );
     }
 
@@ -82,7 +83,7 @@ export class AddTaskComponent {
         this.addTaskForm = this.fb.group({
             projectName: [this.editIndex ? this.getObjectForID("project", this.editTask.projectID).projectName : '', [Validators.required]],
             taskName: [this.editIndex ? this.editTask.taskName : '',[Validators.required, Validators.minLength(5), Validators.maxLength(25),Validators.pattern('^[a-zA-Z0-9 \-]*$')]],
-            parentTaskCheck: [''],
+            parentTaskCheck: [false],
             priority:[this.editIndex ? this.editTask.priority : 0, [Validators.required] ],
             parentTask:[this.editIndex ? this.getObjectForID("parentTask", this.editTask.parentTaskID).taskName  : ''],
             startDate: [this.editIndex ? this.editTask.startDate : this.getDateInfo('today'), [Validators.required, DateValidator.date, DateValidator.minDate(new Date())]],

@@ -4,10 +4,11 @@ export class Task {
             public projectID: string,
             public taskName: string,
             public isParentTask: boolean,
-            public priority: string,
+            public priority: number,
             public parentTaskID: string,
             public startDate: string,
             public endDate: string,
-            public userID: string
+            public userID: string,
+            public status: string
         ){}
 }

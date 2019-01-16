@@ -1,0 +1,59 @@
+<article>
+	<form [formGroup]="viewTaskForm">
+    	<div class="col-md-12">
+        	<div id="add-section">
+            	<div class="input-group">
+                    	<label>Project:</label>
+                    	<input type="text" class="form-control medium-textbox" formControlName="projectName" readonly/>
+                    	<button type="button" class="btn btn-primary ml-3" (click)="searchProject()" [disabled]="isParentTask">Search</button>
+                    <div>
+	                    <label class=" sort pr-2 pl-5 mt-1">Sort Task By:</label>
+	                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('sd')">Start Date</button>
+	                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('ed')">End Date</button>
+	                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('p')">Priority</button>
+	                    <button type="button" class="btn btn-secondary btn-sm mr-1" (click)="sortProject('c')">Completed</button>
+                	</div>
+                 </div>                 
+                 <br/>
+        	</div>
+        	<div id="view-section">
+        		<div>
+        			<label>Task Details</label>
+        		</div>
+        		<div id="task-block">
+	        		<div class="input-group" id="task-details" *ngFor="let task of taskArray; index as i;">
+	        			<div class="col-sm-12 col-md-5 input-group">
+		        			<div class="col-sm-6">
+		        				<label><b>Task</b></label><br/>
+		        				<label>{{task.taskName}}</label>
+		        			</div>
+		        			<div class="col-sm-6">
+		        				<label><b>Parent</b></label><br/>
+		        				<label>{{task.parentTaskID}}</label>
+		        			</div>
+	        			</div>
+	        			<div class="col-sm-12 col-md-7 input-group">
+	        				<div class="col-sm-4 col-md-2">
+	        					<label><b>Priority</b></label><br/>
+	        					<label>{{task.priority}}</label>
+	        				</div>
+	        				<div class="col-sm-4 col-md-2">
+	        					<label><b>Start Date</b></label><br/>
+	        					<label>{{task.startDate | date:'MM/dd/yyyy'}}</label>
+	        				</div>
+	        				<div class="col-sm-4 col-md-2">
+	        					<label><b>End Date</b></label><br/>
+	        					<label>{{task.endDate | date:'MM/dd/yyyy'}}</label>
+	        				</div>
+	        				<div class="col-sm-12 col-md-6">
+	       						<button type="button" class="btn btn-primary float-right" (click)="endTask()">End Task</button>
+	       						<button type="button" class="btn btn-primary float-right mr-3" (click)="editTask()">Edit</button>
+	       					</div>
+	        			</div>
+	        		</div>   
+        		</div>     		
+        	</div>
+    	</div>
+	</form>
+</article>
+<app-modal-popup [key]="popuptitle" [arrayInfo]="projects"></app-modal-popup>
