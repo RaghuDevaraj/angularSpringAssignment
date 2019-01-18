@@ -44,10 +44,10 @@ export class AddTaskComponent {
     // dependency injection
     constructor(private fb: FormBuilder, private service: ProjectManagerService,private route: ActivatedRoute){
         
-        this.projects.push(new Project("1","Anthem","","","","",4,"",));
-        this.projects.push(new Project("2","Aetna","","","","",1,""));
-        this.projects.push(new Project("3","Toyota","","","","",2,""));
-        this.projects.push(new Project("4","Cigna","","","","",3,""));
+        this.projects.push(new Project("1","Anthem",3,3,"","",4,"",));
+        this.projects.push(new Project("2","Aetna",5,1,"","",1,""));
+        this.projects.push(new Project("3","Toyota",6,2,"","",2,""));
+        this.projects.push(new Project("4","Cigna",4,0,"","",3,""));
         
         this.parentTasks.push(new ParentTask("1","Add component"));
         this.parentTasks.push(new ParentTask("2","Delete component"));

@@ -25,10 +25,10 @@ export class ViewTaskComponent {
     
     // dependecy injection
     constructor(private service: ProjectManagerService){
-        this.projects.push(new Project("1","Anthem","","","","",4,"",));
-        this.projects.push(new Project("2","Aetna","","","","",1,""));
-        this.projects.push(new Project("3","Toyota","","","","",2,""));
-        this.projects.push(new Project("4","Cigna","","","","",3,""));
+        this.projects.push(new Project("1","Anthem",5,3,"","",4,"",));
+        this.projects.push(new Project("2","Aetna",6,1,"","",1,""));
+        this.projects.push(new Project("3","Toyota",4,0,"","",2,""));
+        this.projects.push(new Project("4","Cigna",4,1,"","",3,""));
         
         this.viewTaskForm = new FormGroup({
             projectName: new FormControl()

@@ -200,7 +200,7 @@ export class ProjectComponent {
       } else if(by == "p") {
           this.projectDetails.sort((a,b) => a.priority - b.priority);
       }  else if(by == "c") {
-        this.projectDetails.sort((a,b) => a.completedTasks.localeCompare(b.completedTasks));
+        this.projectDetails.sort((a,b) => b.completedTasks - a.completedTasks);
     }
   } 
   
