@@ -1,17 +1,23 @@
 package com.cts.springboot.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
 	
 	public User(){}
 
-	public User(Long id, String firstName, String lastName, String employeeID) {
+	public User(Long userID, String firstName, String lastName, String employeeID) {
 		super();
-		this.id = id;
+		this.userID = userID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.employeeID = employeeID;
@@ -19,33 +25,100 @@ public class User {
 	
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long userID;
 	private String firstName;
 	private String lastName;
 	private String employeeID;
 	
-	public Long getId() {
-		return id;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="userID", fetch=FetchType.EAGER)
+	private Set<Project> projects=new HashSet<Project>();
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="userID", fetch=FetchType.EAGER)
+	private Set<Task> tasks=new HashSet<Task>();
+
+	/**
+	 * @return the userID
+	 */
+	public Long getUserID() {
+		return userID;
 	}
-	public void setId(Long id) {
-		this.id = id;
+
+	/**
+	 * @param userID the userID to set
+	 */
+	public void setUserID(Long userID) {
+		this.userID = userID;
 	}
+
+	/**
+	 * @return the firstName
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
+
+	/**
+	 * @param firstName the firstName to set
+	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
+	/**
+	 * @return the lastName
+	 */
 	public String getLastName() {
 		return lastName;
 	}
+
+	/**
+	 * @param lastName the lastName to set
+	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	/**
+	 * @return the employeeID
+	 */
 	public String getEmployeeID() {
 		return employeeID;
 	}
+
+	/**
+	 * @param employeeID the employeeID to set
+	 */
 	public void setEmployeeID(String employeeID) {
 		this.employeeID = employeeID;
 	}
+
+	/**
+	 * @return the projects
+	 */
+	public Set<Project> getProjects() {
+		return projects;
+	}
+
+	/**
+	 * @param projects the projects to set
+	 */
+	public void setProjects(Set<Project> projects) {
+		this.projects = projects;
+	}
+
+	/**
+	 * @return the tasks
+	 */
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	/**
+	 * @param tasks the tasks to set
+	 */
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+	
+	
 }
