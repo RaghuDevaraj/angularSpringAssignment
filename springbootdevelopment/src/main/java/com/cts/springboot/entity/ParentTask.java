@@ -26,7 +26,7 @@ public class ParentTask {
 	private Long parentTaskID;
 	private String parentTaskName;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="parentTaskID", fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="parentTask")
 	private Set<Task> tasks=new HashSet<Task>();
 	
 	/**

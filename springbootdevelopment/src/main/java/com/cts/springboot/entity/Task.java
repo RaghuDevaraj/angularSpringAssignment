@@ -33,54 +33,59 @@ public class Task {
 	private Date endDate;
 	private String status;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "userID")
-	private User userID;
+	@ManyToOne
+	private User user;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "projectID")
-	private Project projectID;
+	@ManyToOne
+	private Project project;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "parentTaskID")
-	private ParentTask parentTaskID;	
+	@ManyToOne
+	private ParentTask parentTask;	
+	
 	
 	/**
-	 * @return the userID
+	 * @return the user
 	 */
-	public User getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
+
 	/**
-	 * @param userID the userID to set
+	 * @param user the user to set
 	 */
-	public void setUserID(User userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
+
+	
 	/**
-	 * @return the projectID
+	 * @return the project
 	 */
-	public Project getProjectID() {
-		return projectID;
+	public Project getProject() {
+		return project;
 	}
+
 	/**
-	 * @param projectID the projectID to set
+	 * @param project the project to set
 	 */
-	public void setProjectID(Project projectID) {
-		this.projectID = projectID;
+	public void setProject(Project project) {
+		this.project = project;
 	}
+
 	/**
-	 * @return the parentTaskID
+	 * @return the parentTask
 	 */
-	public ParentTask getParentTaskID() {
-		return parentTaskID;
+	public ParentTask getParentTask() {
+		return parentTask;
 	}
+
 	/**
-	 * @param parentTaskID the parentTaskID to set
+	 * @param parentTask the parentTask to set
 	 */
-	public void setParentTaskID(ParentTask parentTaskID) {
-		this.parentTaskID = parentTaskID;
+	public void setParentTask(ParentTask parentTask) {
+		this.parentTask = parentTask;
 	}
+
 	/**
 	 * @return the taskID
 	 */

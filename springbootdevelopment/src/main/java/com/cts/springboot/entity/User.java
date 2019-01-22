@@ -30,10 +30,10 @@ public class User {
 	private String lastName;
 	private String employeeID;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="userID", fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
 	private Set<Project> projects=new HashSet<Project>();
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="userID", fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
 	private Set<Task> tasks=new HashSet<Task>();
 
 	/**

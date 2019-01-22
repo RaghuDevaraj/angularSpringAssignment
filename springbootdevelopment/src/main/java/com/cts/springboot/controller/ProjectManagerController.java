@@ -18,31 +18,59 @@ import com.cts.springboot.entity.Task;
 import com.cts.springboot.entity.User;
 import com.cts.springboot.service.ProjectManagerService;
 
+/**
+ * @author 326452 
+ * ProjectManagerController to handle the requests for user,
+ * 			project and task operations.
+ */
 @RestController
 public class ProjectManagerController {
-	
+
+	/**
+	 * Dependency injection of ProjectManagerService
+	 */
 	@Autowired
 	private ProjectManagerService pmService;
-	
+
+	/**
+	 * GET Method to retrieve users
+	 * 
+	 * @return list of users
+	 */
 	@GetMapping("/users")
 	public ResponseEntity<Response> getUsers() {
 		return ResponseEntity.ok().body(new Response(null, pmService.getUsers(), null));
 	}
-	
+
+	/**
+	 * POST Method to save the user
+	 * @param user
+	 * @return Success Message
+	 */
 	@PostMapping("/addUser")
 	public ResponseEntity<Response> addUser(@RequestBody User user) {
 		return ResponseEntity.ok().body(new Response(null, null, pmService.addUser(user)));
 	}
-	
+
+	/**
+	 * PUT Method to update the user
+	 * @param user
+	 * @return Success / Error Message
+	 */
 	@PutMapping("/updateUser")
 	public ResponseEntity<Response> updateUser(@RequestBody User user) {
 		String output = pmService.updateUser(user);
-		if("invalid".equals(output)){
+		if ("invalid".equals(output)) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body(new Response("Invalid User ID.", null, null));
 		}
-		return ResponseEntity.ok().body(new Response(null, null, output));		
+		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
-	
+
+	/**
+	 * DELETE Method to delete the user
+	 * @param id
+	 * @return Success / Error Message
+	 */
 	@DeleteMapping("/deleteUser/{id}")
 	public ResponseEntity<Response> deleteBookDetails(@PathVariable int id) {
 		String output = pmService.deleteUser(id);
@@ -51,70 +79,117 @@ public class ProjectManagerController {
 		}
 		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
-	
+
+	/**
+	 * GET Method to retrieve the projects
+	 * @return list of projects
+	 */
 	@GetMapping("/projects")
 	public ResponseEntity<Response> getProjects() {
 		return ResponseEntity.ok().body(new Response(null, pmService.getProjects(), null));
 	}
-	
+
+	/**
+	 * POST Method to save the project
+	 * @param project
+	 * @return Success Message
+	 */
 	@PostMapping("/addProject")
 	public ResponseEntity<Response> addProject(@RequestBody Project project) {
 		return ResponseEntity.ok().body(new Response(null, null, pmService.addProject(project)));
 	}
 
+	/**
+	 * PUT Method to update the project
+	 * @param project
+	 * @return Success / Error Message
+	 */
 	@PutMapping("/updateProject")
 	public ResponseEntity<Response> updateProject(@RequestBody Project project) {
 		String output = pmService.updateProject(project);
-		if("invalid".equals(output)){
+		if ("invalid".equals(output)) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body(new Response("Invalid Project ID.", null, null));
 		}
-		return ResponseEntity.ok().body(new Response(null, null, output));		
+		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
-	
+
+	/**
+	 * PUT Method to update the project tasks to suspended status
+	 * @param projectID
+	 * @return Success / Error Message
+	 */
 	@PutMapping("/suspendProject")
 	public ResponseEntity<Response> suspendProject(@RequestBody Integer projectID) {
 		String output = pmService.suspendProject(projectID);
-		if("invalid".equals(output)){
+		if ("invalid".equals(output)) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body(new Response("Invalid Project ID.", null, null));
 		}
-		return ResponseEntity.ok().body(new Response(null, null, output));		
+		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
-	
+
+	/**
+	 * GET Method to retrieve the parent tasks
+	 * @return list of parent tasks
+	 */
 	@GetMapping("/parentTasks")
 	public ResponseEntity<Response> getParentTasks() {
 		return ResponseEntity.ok().body(new Response(null, pmService.getParentTasks(), null));
 	}
-	
+
+	/**
+	 * POST Method to save the parent task
+	 * @param parentTask
+	 * @return Success Message
+	 */
 	@PostMapping("/addParentTask")
 	public ResponseEntity<Response> addParentTask(@RequestBody ParentTask parentTask) {
 		return ResponseEntity.ok().body(new Response(null, null, pmService.addParentTask(parentTask)));
 	}
-	
+
+	/**
+	 * GET Method to retrieve the tasks
+	 * @return list of tasks
+	 */
 	@GetMapping("/tasks")
 	public ResponseEntity<Response> getTasks() {
 		return ResponseEntity.ok().body(new Response(null, pmService.getTasks(), null));
 	}
-	
+
+	/**
+	 * POST Method to save the task
+	 * @param task
+	 * @return Success Message
+	 */
 	@PostMapping("/addTask")
 	public ResponseEntity<Response> addTask(@RequestBody Task task) {
 		return ResponseEntity.ok().body(new Response(null, null, pmService.addTask(task)));
 	}
-	
+
+	/**
+	 * PUT Method to update the task
+	 * @param task
+	 * @return Success / Error Message
+	 */
 	@PutMapping("/updateTask")
 	public ResponseEntity<Response> updateTask(@RequestBody Task task) {
 		String output = pmService.updateTask(task);
-		if("invalid".equals(output)){
+		if ("invalid".equals(output)) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body(new Response("Invalid Task ID.", null, null));
 		}
-		return ResponseEntity.ok().body(new Response(null, null, output));		
+		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
-	
+
+	/**
+	 * PUT Method to update the status of task to completed
+	 * @param taskID
+	 * @return Success / Error Message
+	 */
 	@PutMapping("/endTask")
 	public ResponseEntity<Response> endTask(@RequestBody int taskID) {
 		String output = pmService.endTask(taskID);
-		if("invalid".equals(output)){
+		if ("invalid".equals(output)) {
 			return ((BodyBuilder) ResponseEntity.notFound()).body(new Response("Invalid Task ID.", null, null));
 		}
-		return ResponseEntity.ok().body(new Response(null, null, output));		
+		return ResponseEntity.ok().body(new Response(null, null, output));
 	}
 }

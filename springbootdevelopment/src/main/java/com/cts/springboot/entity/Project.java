@@ -6,10 +6,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -36,11 +34,10 @@ public class Project {
 	private Date endDate;
 	private int priority;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "userID")
-	private User userID;
+	@ManyToOne
+	private User user;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="projectID", fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="project")
 	private Set<Task> tasks=new HashSet<Task>();	
 
 	/**
@@ -118,19 +115,19 @@ public class Project {
 		this.priority = priority;
 	}
 
+	
 	/**
-	 * @return the userID
+	 * @return the user
 	 */
-	public User getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
 	/**
-	 * @param userID
-	 *            the userID to set
+	 * @param user the user to set
 	 */
-	public void setUserID(User userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	/**
