@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from "@angular/common/http";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +31,7 @@ import { ModalPopupComponent } from 'src/app/shared/components/modal-popup/modal
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
+    HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule
   ],

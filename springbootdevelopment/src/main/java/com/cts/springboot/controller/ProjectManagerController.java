@@ -3,12 +3,14 @@ package com.cts.springboot.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.springboot.entity.ParentTask;
@@ -23,7 +25,9 @@ import com.cts.springboot.service.ProjectManagerService;
  * ProjectManagerController to handle the requests for user,
  * 			project and task operations.
  */
+@CrossOrigin
 @RestController
+@RequestMapping("/projectManager")
 public class ProjectManagerController {
 
 	/**
@@ -95,7 +99,7 @@ public class ProjectManagerController {
 	 * @return Success Message
 	 */
 	@PostMapping("/addProject")
-	public ResponseEntity<Response> addProject(@RequestBody Project project) {
+	public ResponseEntity<Response> addProject(@RequestBody Project project) {		
 		return ResponseEntity.ok().body(new Response(null, null, pmService.addProject(project)));
 	}
 

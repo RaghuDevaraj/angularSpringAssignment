@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -30,10 +29,10 @@ public class User {
 	private String lastName;
 	private String employeeID;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user", orphanRemoval = true)
 	private Set<Project> projects=new HashSet<Project>();
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user", orphanRemoval = true)
 	private Set<Task> tasks=new HashSet<Task>();
 
 	/**
@@ -91,34 +90,5 @@ public class User {
 	public void setEmployeeID(String employeeID) {
 		this.employeeID = employeeID;
 	}
-
-	/**
-	 * @return the projects
-	 */
-	public Set<Project> getProjects() {
-		return projects;
-	}
-
-	/**
-	 * @param projects the projects to set
-	 */
-	public void setProjects(Set<Project> projects) {
-		this.projects = projects;
-	}
-
-	/**
-	 * @return the tasks
-	 */
-	public Set<Task> getTasks() {
-		return tasks;
-	}
-
-	/**
-	 * @param tasks the tasks to set
-	 */
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
-	}
-	
 	
 }

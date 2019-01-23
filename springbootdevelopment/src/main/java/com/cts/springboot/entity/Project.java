@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -35,6 +36,7 @@ public class Project {
 	private int priority;
 
 	@ManyToOne
+	@JoinColumn(name = "userID")
 	private User user;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="project")
@@ -115,7 +117,6 @@ public class Project {
 		this.priority = priority;
 	}
 
-	
 	/**
 	 * @return the user
 	 */
@@ -126,22 +127,10 @@ public class Project {
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(User user) {
+	public void setUser(Long userID) {
+		User user = new User();
+		user.setUserID(userID);
 		this.user = user;
-	}
-
-	/**
-	 * @return the tasks
-	 */
-	public Set<Task> getTasks() {
-		return tasks;
-	}
-
-	/**
-	 * @param tasks the tasks to set
-	 */
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
 	}
 	
 }

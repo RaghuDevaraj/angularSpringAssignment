@@ -1,6 +1,8 @@
 <article>
         <form [formGroup]="projectForm">
           <div class="col-md-12">
+           	<label *ngIf='successMessage' class="text-success">{{successMessage}}</label>
+          	<label *ngIf='errorMessage' class="text-danger">{{errorMessage}}</label>
               <div id="add-section">
                  <div class="input-group">
                     <label>Project:</label>

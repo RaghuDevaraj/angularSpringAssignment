@@ -26,6 +26,9 @@ export class UserComponent implements OnInit{
     // popup component
     @ViewChild(ConfirmationPopupComponent)
     private popup: ConfirmationPopupComponent;
+    // messages
+    successMessage: string;
+    errorMessage: string;
 
     // dependency injection
     constructor(private fb: FormBuilder, private service: ProjectManagerService){}
@@ -33,6 +36,7 @@ export class UserComponent implements OnInit{
     // on load of the component
     ngOnInit(): void {
         this.buildForm();
+        this.getUser();
     }
 
     // build the form controls and validations
@@ -93,16 +97,31 @@ export class UserComponent implements OnInit{
         'lastName': '',
         'employeeID': ''
     }
+    
+    // method to get user details
+    getUser() {
+        this.service.getUsers().subscribe(
+                (response) => {
+                    this.userDetails = response;
+                    this.userDetailsCopy = Object.assign([], this.userDetails);
+            });
+    }
 
     // method to add / update the user
-    addUpdateUser(): void {
-        console.log(this.userForm.value);
-        if(typeof this.editIndex === "number"){
-            this.userDetails[this.editIndex] = this.userForm.value;            
-        } else {
-            this.userDetails.push(this.userForm.value);            
+    addUpdateUser(): void { 
+        let user = this.userForm.value;
+        if(typeof this.editIndex === "number") {
+            user.userID = this.editIndex;
         }
-        this.userDetailsCopy = Object.assign([], this.userDetails);
+        this.service.saveUpdateUser(user).subscribe(
+                (response) => {
+                   if(response['message']) {
+                       this.successMessage = response['message'];
+                       this.getUser();
+                   } else {
+                      this.errorMessage =  response['error'];
+                   }
+        });          
         this.reset();
     } 
 
@@ -134,18 +153,27 @@ export class UserComponent implements OnInit{
         this.userForm.get("employeeID").reset(userInfo.employeeID);
         this.userForm.markAsDirty();
         this.isEdit= true;
-        this.editIndex= index;
+        this.editIndex = userInfo.id;
     }
 
     // method to delete the user
     deleteUser(index: number): void {
         const userInfo: User  = this.userDetails[index];
+        this.paramsArray = [];
         this.popupmessage = 'user-delete';
         this.paramsArray.push((userInfo.firstName + ' ' + userInfo.lastName).toUpperCase());
 
         // display the confirmation popup b4 deleting the user info.
         this.popup.showConfirmationPopup().then((result) => {
-
+            this.service.deleteUser(userInfo.id).subscribe(
+                (response) => {
+                    if(response['message']) {
+                        this.successMessage = response['message'];
+                        this.getUser();
+                    } else {
+                       this.errorMessage =  response['error'];
+                    }
+             })
         }, (reason) => {
             // user closed the popup by clicking cross or cancel button
         })

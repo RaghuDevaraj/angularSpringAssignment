@@ -1,10 +1,12 @@
 <article>
         <form [formGroup]="addTaskForm">
           <div class="col-md-12">
+          	  <label *ngIf='successMessage' class="text-success">{{successMessage}}</label>
+          	  <label *ngIf='errorMessage' class="text-danger">{{errorMessage}}</label>
               <div id="add-section">
                  <div class="input-group">
                     <label>Project:</label>
-                    <input type="text" class="form-control medium-textbox" formControlName="projectName" readonly/>
+                    <input type="text" class="form-control medium-textbox" formControlName="project" readonly/>
                     <button type="button" class="btn btn-primary ml-3" (click)="searchProject()" [disabled]="isParentTask || editIndex">Search</button>
                  </div>                 
                  <br/>
@@ -58,7 +60,7 @@
                 <br/>
                  <div class="col-md-7">
                      <button type="button" class="btn btn-primary float-right ml-1" (click)="reset()" id="resetButton">Reset</button>
-                     <button type="button" class="btn btn-primary float-right" [disabled]="addTaskForm.invalid" (click)="addUpdateProject()">{{editIndex ? 'Update' : 'Add'}}</button>
+                     <button type="button" class="btn btn-primary float-right" [disabled]="addTaskForm.invalid" (click)="addUpdateTask()">{{editIndex ? 'Update' : 'Add'}}</button>
                  </div>
                  <br/><br/>
         	</div>

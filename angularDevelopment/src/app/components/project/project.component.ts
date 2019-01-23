@@ -23,11 +23,15 @@ export class ProjectComponent {
   isEdit: boolean;
   editIndex: number;
   users: User[] = [];
+  selectedUser: User;
   // popup variables
   popuptitle: string;
   // popup component
   @ViewChild(ModalPopupComponent)
   private popup: ModalPopupComponent;
+  //messages
+  successMessage: string;
+  errorMessage: string;
 
   // form errors
   formErrors = {
@@ -42,6 +46,8 @@ export class ProjectComponent {
   // on load of the component
   ngOnInit(): void {
       this.buildForm();
+      this.getUsers();
+      this.getProjects();
       this.subscribeDateCheckInfo();
   }
 
@@ -103,6 +109,23 @@ export class ProjectComponent {
           }
       });
   }  
+  
+  // method to get user details
+  getUsers() {
+      this.service.getUsers().subscribe(
+              (response) => {
+                  this.users = response;
+          });
+  }
+  
+  // method to get project details
+  getProjects() {
+      this.service.getProjects().subscribe(
+              (response) => {
+                  this.projectDetails = response;
+                  this.projectDetailsCopy = Object.assign([], this.projectDetails);
+          });
+  }
 
   // subscribe to date check checkbox
   subscribeDateCheckInfo(): void {
@@ -152,16 +175,12 @@ export class ProjectComponent {
   }
 
   // search user
-  searchUser(): void {
-    this.users = [];
-    this.users.push(new User("1","Raghu","Devaraj","326452"));
-    this.users.push(new User("2","Sugriev","Prathap","321677"));
-    this.users.push(new User("3","Krishnaveni","Raghu","265432"));
+  searchUser(): void {    
     this.popuptitle="user";
     // display the user details in modal poup
     this.popup.showConfirmationPopup().then( (result) => {
-        let user = this.users.find( user => user.id == result);
-        this.projectForm.get("manager").reset(user.firstName + ' ' + user.lastName);
+        this.selectedUser = this.users.find( user => user.id == parseInt(result));
+        this.projectForm.get("manager").reset(this.selectedUser.firstName + ' ' + this.selectedUser.lastName);
     }, (reason) =>{
 
     });
@@ -169,13 +188,20 @@ export class ProjectComponent {
 
   // method to add / update the project
   addUpdateProject(): void {
-      console.log(this.projectForm.value);
+      let project = this.projectForm.value;
       if(typeof this.editIndex === "number"){
-          this.projectDetails[this.editIndex] = this.projectForm.value;            
-      } else {
-          this.projectDetails.push(this.projectForm.value);            
-      }
-      this.projectDetailsCopy = Object.assign([], this.projectDetails);
+          project.projectID = this.editIndex;            
+      } 
+      project.user = this.selectedUser.id;
+      this.service.saveUpdateProject(project).subscribe(
+              (response) => {
+                 if(response['message']) {
+                     this.successMessage = response['message'];
+                     this.getProjects();
+                 } else {
+                    this.errorMessage =  response['error'];
+                 }
+      });            
       this.reset();
   } 
 

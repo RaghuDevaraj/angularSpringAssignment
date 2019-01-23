@@ -27,12 +27,18 @@ export class AddTaskComponent {
     editIndex: number;
     editTask: Task;
     isParentTask: boolean;
+    selectedProject: Project;
+    selectedParentTask: ParentTask;
+    selectedUser: User;
     // popup variables
     popuptitle: string;
     popuparray: any;
     // popup component
     @ViewChild(ModalPopupComponent)
     private popup: ModalPopupComponent;
+    //messages
+    successMessage: string;
+    errorMessage: string;
 
     // form errors
     formErrors = {
@@ -42,46 +48,23 @@ export class AddTaskComponent {
     }
 
     // dependency injection
-    constructor(private fb: FormBuilder, private service: ProjectManagerService,private route: ActivatedRoute){
-        
-        this.projects.push(new Project("1","Anthem",3,3,"","",4,"",));
-        this.projects.push(new Project("2","Aetna",5,1,"","",1,""));
-        this.projects.push(new Project("3","Toyota",6,2,"","",2,""));
-        this.projects.push(new Project("4","Cigna",4,0,"","",3,""));
-        
-        this.parentTasks.push(new ParentTask("1","Add component"));
-        this.parentTasks.push(new ParentTask("2","Delete component"));
-        this.parentTasks.push(new ParentTask("3","Reset component"));
-        
-        this.users.push(new User("1","Raghu","Devaraj","326452"));
-        this.users.push(new User("2","Sugriev","Prathap","321677"));
-        this.users.push(new User("3","Krishnaveni","Raghu","265432"));
-        
+    constructor(private fb: FormBuilder, private service: ProjectManagerService,private route: ActivatedRoute){       
         this.editIndex = this.route.snapshot.queryParams['editTask']; 
-        this.editTask = new Task(
-                    "5",
-                    "3",
-                    "Pattern test",         
-                    false,
-                    25,
-                    "2",
-                    "2019-12-19",
-                    "2019-12-30",
-                    "2",
-                    ""
-                );
+        
     }
 
     // on load of the component
     ngOnInit(): void {
         this.buildForm();
+        this.getUsers();
+        this.getProjects();
         this.subscribeParentCheckInfo();
     }
 
     // build the form controls and validations
     buildForm(): void {
         this.addTaskForm = this.fb.group({
-            projectName: [this.editIndex ? this.getObjectForID("project", this.editTask.projectID).projectName : '', [Validators.required]],
+            project: [this.editIndex ? this.getObjectForID("project", this.editTask.projectID).project : '', [Validators.required]],
             taskName: [this.editIndex ? this.editTask.taskName : '',[Validators.required, Validators.minLength(5), Validators.maxLength(25),Validators.pattern('^[a-zA-Z0-9 \-]*$')]],
             parentTaskCheck: [false],
             priority:[this.editIndex ? this.editTask.priority : 0, [Validators.required] ],
@@ -123,6 +106,22 @@ export class AddTaskComponent {
             }
         });
     }  
+    
+    // method to get user details
+    getUsers() {
+        this.service.getUsers().subscribe(
+                (response) => {
+                    this.users = response;
+            });
+    }
+    
+    // method to get project details
+    getProjects() {
+        this.service.getProjects().subscribe(
+                (response) => {
+                    this.projects = response;
+            });
+    }
 
     // subscribe to date check checkbox
     subscribeParentCheckInfo(): void {        
@@ -132,7 +131,7 @@ export class AddTaskComponent {
           if(!value) {
               this.isParentTask = false;
               // project field
-              this.addTaskForm.get("projectName").setValidators([Validators.required]);
+              this.addTaskForm.get("project").setValidators([Validators.required]);
               // priority field
               this.addTaskForm.get("priority").enable();
               // start date field
@@ -149,7 +148,7 @@ export class AddTaskComponent {
           } else {  
               this.isParentTask = true;
               // project field
-              this.addTaskForm.get("projectName").setValidators(null);
+              this.addTaskForm.get("project").setValidators(null);
               // priority field
               this.addTaskForm.get("priority").disable();
               // start date field
@@ -180,7 +179,7 @@ export class AddTaskComponent {
     }
     
     // find the Object for the id of project / user / parent task
-    getObjectForID(valueFor: string, id: string): any { 
+    getObjectForID(valueFor: string, id: any): any { 
         if(valueFor == "user") {
             return this.users.find((user) => user.id == id);
         } else if(valueFor == "project") {
@@ -201,8 +200,8 @@ export class AddTaskComponent {
         this.popuparray= this.projects;
         // display the project details in modal poup
         this.popup.showConfirmationPopup().then( (result) => {
-            let project = this.getObjectForID("project", result);
-            this.addTaskForm.get("projectName").reset(project.projectName);
+            this.selectedProject = this.getObjectForID("project", result);
+            this.addTaskForm.get("project").reset(this.selectedProject.projectName);
         }, (reason) =>{
 
         });
@@ -214,8 +213,8 @@ export class AddTaskComponent {
         this.popuparray=this.parentTasks;
      // display the project details in modal poup
         this.popup.showConfirmationPopup().then( (result) => {
-            let parentTask = this.getObjectForID("parentTask", result);
-            this.addTaskForm.get("parentTask").reset(parentTask.taskName);
+            this.selectedParentTask = this.getObjectForID("parentTask", result);
+            this.addTaskForm.get("parentTask").reset(this.selectedParentTask.taskName);
         }, (reason) =>{
 
         });
@@ -229,24 +228,37 @@ export class AddTaskComponent {
       this.popuparray=this.users;
       // display the user details in modal poup
       this.popup.showConfirmationPopup().then( (result) => {
-          let user = this.getObjectForID("user", result);
-          this.addTaskForm.get("user").reset(user.firstName + ' ' + user.lastName);
+          this.selectedUser = this.getObjectForID("user", result);
+          this.addTaskForm.get("user").reset(this.selectedUser.firstName + ' ' + this.selectedUser.lastName);
       }, (reason) =>{
 
       });
     }
 
     // method to add / update the task
-    addUpdateProject(): void {
+    addUpdateTask(): void {
+        let task = this.addTaskForm.value;
         if(typeof this.editIndex === "number"){
-        } else {
-        }
+            
+        } 
+        task.project = this.selectedProject.id;
+        task.parentTask = this.selectedParentTask ? this.selectedParentTask.taskID : null;
+        task.user = this.selectedUser.id;
+        this.service.saveUpdateTask(task).subscribe(
+                (response) => {
+                    if(response['message']) {
+                        this.successMessage = response['message'];
+                        this.getProjects();
+                    } else {
+                       this.errorMessage =  response['error'];
+                    }
+         });
         this.reset();
     } 
 
     // method to clear the user details
     reset(): void {
-        this.addTaskForm.controls['projectName'].reset('');
+        this.addTaskForm.controls['project'].reset('');
         this.addTaskForm.controls['taskName'].reset('');
         this.addTaskForm.controls['parentTaskCheck'].reset(false);
         this.addTaskForm.controls['priority'].reset(0);

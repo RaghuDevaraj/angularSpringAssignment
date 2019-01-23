@@ -2,7 +2,6 @@ package com.cts.springboot.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -34,12 +33,15 @@ public class Task {
 	private String status;
 	
 	@ManyToOne
+	@JoinColumn(name = "userID")
 	private User user;
 	
 	@ManyToOne
+	@JoinColumn(name = "projectID")
 	private Project project;
 	
-	@ManyToOne
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "parentTaskID")
 	private ParentTask parentTask;	
 	
 	
@@ -53,7 +55,9 @@ public class Task {
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(User user) {
+	public void setUser(Long userID) {
+		User user = new User();
+		user.setUserID(userID);
 		this.user = user;
 	}
 
@@ -68,7 +72,9 @@ public class Task {
 	/**
 	 * @param project the project to set
 	 */
-	public void setProject(Project project) {
+	public void setProject(Long projectID) {
+		Project project = new Project();
+		project.setProjectID(projectID);
 		this.project = project;
 	}
 
@@ -82,8 +88,12 @@ public class Task {
 	/**
 	 * @param parentTask the parentTask to set
 	 */
-	public void setParentTask(ParentTask parentTask) {
-		this.parentTask = parentTask;
+	public void setParentTask(Long parentTaskID) {
+		if(parentTaskID != null) {
+			ParentTask parentTask = new ParentTask();
+			parentTask.setParentTaskID(parentTaskID);
+			this.parentTask = parentTask;
+		}		
 	}
 
 	/**
