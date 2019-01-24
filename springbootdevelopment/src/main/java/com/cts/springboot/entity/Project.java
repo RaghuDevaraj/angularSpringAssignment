@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -39,7 +40,7 @@ public class Project {
 	@JoinColumn(name = "userID")
 	private User user;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="project")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="project", orphanRemoval = true)
 	private Set<Task> tasks=new HashSet<Task>();	
 
 	/**
@@ -115,7 +116,7 @@ public class Project {
 	 */
 	public void setPriority(int priority) {
 		this.priority = priority;
-	}
+	}	
 
 	/**
 	 * @return the user
@@ -132,5 +133,7 @@ public class Project {
 		user.setUserID(userID);
 		this.user = user;
 	}
+
+	
 	
 }

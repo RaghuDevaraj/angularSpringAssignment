@@ -55,19 +55,5 @@ public class ParentTask {
 	public void setParentTaskName(String parentTaskName) {
 		this.parentTaskName = parentTaskName;
 	}
-
-	/**
-	 * @return the tasks
-	 */
-	public Set<Task> getTasks() {
-		return tasks;
-	}
-
-	/**
-	 * @param tasks the tasks to set
-	 */
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
-	}	
 	
 }

@@ -44,12 +44,32 @@ export class AddTaskComponent {
     formErrors = {
       'taskName': '',
       'startDate': '',
-      'endDate': ''
+      'endDate': ''      
     }
 
     // dependency injection
     constructor(private fb: FormBuilder, private service: ProjectManagerService,private route: ActivatedRoute){       
         this.editIndex = this.route.snapshot.queryParams['editTask']; 
+        setTimeout(() => {	
+            if(this.editIndex) {
+                this.service.getTask(this.editIndex).subscribe((response) => {
+                    this.editTask = response;
+                    // set form values
+                    this.selectedProject = this.getObjectForID("project", this.editTask.projectID);
+                    this.selectedParentTask = this.getObjectForID("parentTask", this.editTask.parentTaskID);
+                    this.selectedUser = this.getObjectForID("user", this.editTask.userID);
+                    
+                    this.addTaskForm.get('project').reset(this.selectedProject.projectName);
+                    this.addTaskForm.get('taskName').reset(this.editTask.taskName);
+                    this.addTaskForm.get('priority').reset(this.editTask.priority);
+                    this.addTaskForm.get('parentTask').reset(this.selectedParentTask ? this.selectedParentTask.taskName : '');
+                    this.addTaskForm.get('startDate').reset(this.getValidDate(this.editTask.startDate));
+                    this.addTaskForm.get('endDate').reset(this.getValidDate(this.editTask.endDate));
+                    this.addTaskForm.get('user').reset(this.selectedUser.firstName + " " + this.selectedUser.lastName);
+                    
+                })
+            }
+        }, 50);        
         
     }
 
@@ -58,20 +78,21 @@ export class AddTaskComponent {
         this.buildForm();
         this.getUsers();
         this.getProjects();
+        this.getParentTasks();
         this.subscribeParentCheckInfo();
     }
 
     // build the form controls and validations
     buildForm(): void {
         this.addTaskForm = this.fb.group({
-            project: [this.editIndex ? this.getObjectForID("project", this.editTask.projectID).project : '', [Validators.required]],
-            taskName: [this.editIndex ? this.editTask.taskName : '',[Validators.required, Validators.minLength(5), Validators.maxLength(25),Validators.pattern('^[a-zA-Z0-9 \-]*$')]],
+            project: ['', [Validators.required]],
+            taskName: ['',[Validators.required, Validators.minLength(5), Validators.maxLength(25),Validators.pattern('^[a-zA-Z0-9 \-]*$')]],
             parentTaskCheck: [false],
-            priority:[this.editIndex ? this.editTask.priority : 0, [Validators.required] ],
-            parentTask:[this.editIndex ? this.getObjectForID("parentTask", this.editTask.parentTaskID).taskName  : ''],
-            startDate: [this.editIndex ? this.editTask.startDate : this.getDateInfo('today'), [Validators.required, DateValidator.date, DateValidator.minDate(new Date())]],
-            endDate: [this.editIndex ? this.editTask.endDate : this.getDateInfo('tomorrow'), [Validators.required, DateValidator.date]],
-            user:[this.editIndex ? this.getObjectForID("user", this.editTask.userID).firstName + " " + this.getObjectForID("user", this.editTask.userID).lastName  : '', [Validators.required]]
+            priority:[ 0 ],
+            parentTask:[''],
+            startDate: [this.getDateInfo('today'), [Validators.required, DateValidator.date, DateValidator.minDate(new Date())]],
+            endDate: [this.getDateInfo('tomorrow'), [Validators.required, DateValidator.date]],
+            user:['', [Validators.required]]
         }, { validator: Validators.compose([
               DateValidator.maximumDate('startDate', 'endDate'),
               DateValidator.minimumDate('startDate', 'endDate')
@@ -91,6 +112,7 @@ export class AddTaskComponent {
             // clear the earlier error
             this.formErrors[key] = '';
             // check whether user has changed any value
+            console.log(key,control.errors);
             if(control && (control.dirty || control.touched) && control.invalid) {
               const messages = taskMessages[key];            
                 for(const error in control.errors) {
@@ -122,6 +144,14 @@ export class AddTaskComponent {
                     this.projects = response;
             });
     }
+    
+    // method to get the parent task details
+    getParentTasks() {
+        this.service.getParentTasks().subscribe(
+                (response) => {
+                    this.parentTasks = response;
+            });
+    }
 
     // subscribe to date check checkbox
     subscribeParentCheckInfo(): void {        
@@ -132,6 +162,7 @@ export class AddTaskComponent {
               this.isParentTask = false;
               // project field
               this.addTaskForm.get("project").setValidators([Validators.required]);
+              this.addTaskForm.get("project").updateValueAndValidity();
               // priority field
               this.addTaskForm.get("priority").enable();
               // start date field
@@ -144,11 +175,13 @@ export class AddTaskComponent {
               this.addTaskForm.get("endDate").setValidators([Validators.required, DateValidator.date]);
               // user field
               this.addTaskForm.get("user").setValidators([Validators.required]);
+              this.addTaskForm.get("user").updateValueAndValidity();
               this.addTaskForm.updateValueAndValidity();
           } else {  
               this.isParentTask = true;
               // project field
               this.addTaskForm.get("project").setValidators(null);
+              this.addTaskForm.get("project").updateValueAndValidity();
               // priority field
               this.addTaskForm.get("priority").disable();
               // start date field
@@ -159,6 +192,7 @@ export class AddTaskComponent {
               this.addTaskForm.get("endDate").setValidators(null);
               // user field
               this.addTaskForm.get("user").setValidators(null);
+              this.addTaskForm.get("user").updateValueAndValidity();
               this.addTaskForm.updateValueAndValidity();
           }
         })
@@ -238,21 +272,36 @@ export class AddTaskComponent {
     // method to add / update the task
     addUpdateTask(): void {
         let task = this.addTaskForm.value;
-        if(typeof this.editIndex === "number"){
-            
-        } 
-        task.project = this.selectedProject.id;
-        task.parentTask = this.selectedParentTask ? this.selectedParentTask.taskID : null;
-        task.user = this.selectedUser.id;
-        this.service.saveUpdateTask(task).subscribe(
-                (response) => {
-                    if(response['message']) {
-                        this.successMessage = response['message'];
-                        this.getProjects();
-                    } else {
-                       this.errorMessage =  response['error'];
-                    }
-         });
+        if(this.isParentTask) {
+            task.parentTaskName = task.taskName;
+            this.service.saveParentTask(task).subscribe(
+                    (response) => {
+                        if(response['message']) {
+                            this.successMessage = response['message'];
+                            this.getProjects();
+                        } else {
+                           this.errorMessage =  response['error'];
+                        }
+             });
+        } else {
+            if(this.editIndex){
+                task.taskID = this.editIndex;
+            } else {
+                task.status = 'O';
+            } 
+            task.project = this.selectedProject.id;
+            task.parentTask = this.selectedParentTask ? this.selectedParentTask.taskID : null;
+            task.user = this.selectedUser.id;
+            this.service.saveUpdateTask(task).subscribe(
+                    (response) => {
+                        if(response['message']) {
+                            this.successMessage = response['message'];
+                            this.getProjects();
+                        } else {
+                           this.errorMessage =  response['error'];
+                        }
+             });
+        }        
         this.reset();
     } 
 
@@ -267,5 +316,14 @@ export class AddTaskComponent {
         this.addTaskForm.controls['endDate'].reset(this.getDateInfo("tomorrow"));
         this.addTaskForm.controls['user'].reset('');
     }   
+    
+ // get valid date for HTML date field
+    getValidDate(date: any) {
+        let formattedDate = ''
+        if(date) {
+            formattedDate = date.split("T")[0];
+        }
+        return formattedDate;
+    }
 
 }

@@ -88,7 +88,7 @@
                             <div class="card col-md-2">
                                 <div class="card-body col-sm-12">
                                     <button type="button" class="btn btn-primary mb-3 mt-3 col-sm-5" (click)="editProject(i)" id="update">Update</button>
-                                    <button type="button" class="btn btn-primary col-sm-5" (click)="suspendProject()">Suspend</button>
+                                    <button type="button" class="btn btn-primary col-sm-5" (click)="suspendProject(i)">Suspend</button>
                                 </div>
                             </div>
                         </div>
@@ -100,4 +100,4 @@
     </form>
 </article>
 <app-modal-popup [key]="popuptitle" [arrayInfo]="users"></app-modal-popup>
-      
+<app-confirmation-popup [messageKey]="popupmessage" [params]="paramsArray"></app-confirmation-popup>      

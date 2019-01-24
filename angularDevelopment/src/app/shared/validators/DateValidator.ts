@@ -30,6 +30,7 @@ export class DateValidator {
                 return {'maxDate': true};
             } else {
                 errors && errors.maxDate ? delete errors.maxDate : '';
+                errors && Object.keys(errors).length == 0 ? errors = null : '';
                 group.controls[date1].setErrors(errors);
                 return null;
             }     
@@ -47,6 +48,7 @@ export class DateValidator {
                 return {'minimumDate': true};
             } else {
                 errors && errors.minimumDate ? delete errors.minimumDate : '';
+                errors && Object.keys(errors).length == 0 ? errors = null : '';
                 group.controls[date2].setErrors(errors);
                 return null;
             }

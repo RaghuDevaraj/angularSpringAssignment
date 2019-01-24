@@ -1,5 +1,8 @@
 <article>
 	<form [formGroup]="viewTaskForm">
+		<label *ngIf="message" class="text-info">{{message}}</label>
+		<label *ngIf='successMessage' class="text-success">{{successMessage}}</label>
+        <label *ngIf='errorMessage' class="text-danger">{{errorMessage}}</label>
     	<div class="col-md-12">
         	<div id="add-section">
             	<div class="input-group">
@@ -46,8 +49,8 @@
 	        					<label>{{task.endDate | date:'MM/dd/yyyy'}}</label>
 	        				</div>
 	        				<div class="col-sm-12 col-md-6">
-	       						<button type="button" class="btn btn-primary float-right" (click)="endTask()">End Task</button>
-	       						<button type="button" class="btn btn-primary float-right mr-3" (click)="editTask()">Edit</button>
+	       						<button type="button" class="btn btn-primary float-right" (click)="endTask(i)">End Task</button>
+	       						<button type="button" class="btn btn-primary float-right mr-3" (click)="editTask(task.taskID)">Edit</button>
 	       					</div>
 	        			</div>
 	        		</div>   
@@ -57,3 +60,4 @@
 	</form>
 </article>
 <app-modal-popup [key]="popuptitle" [arrayInfo]="projects"></app-modal-popup>
+<app-confirmation-popup [messageKey]="popupmessage" [params]="paramsArray"></app-confirmation-popup>

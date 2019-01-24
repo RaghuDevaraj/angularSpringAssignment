@@ -9,6 +9,9 @@ import com.cts.springboot.entity.Project;
 
 public interface ProjectRepository extends JpaRepository<Project, Long>{
 
-	/*@Query("SELECT Task t set t.status='S' WHERE t.project.projectID = :projectID")
-	List<Project> getProjects();*/
+	@Query("SELECT p.projectID, p.projectName, p.startDate, p.endDate, p.priority, p.user.userID, COUNT(t.taskID), "
+			+ "(SELECT COUNT(tas) FROM Task tas, Project pro WHERE tas.project.projectID = pro.projectID AND tas.status = 'C' AND pro.projectID = p.projectID) "
+			+ "FROM Project p "
+			+ "LEFT JOIN Task t on t.project.projectID = p.projectID GROUP BY p.projectID")
+	List<Project> getProjectDetails();
 }

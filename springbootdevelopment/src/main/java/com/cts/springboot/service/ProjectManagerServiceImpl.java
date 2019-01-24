@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cts.springboot.domain.ParentTaskRepository;
 import com.cts.springboot.domain.ProjectRepository;
@@ -113,6 +114,13 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
 	public List<Project> getProjects() {
 		return projectRepository.findAll();
 	}
+	
+	/**
+	 * Returns list of projects with task details
+	 */
+	public List<Project> getProjectWithDetails() {
+		return projectRepository.getProjectDetails();
+	}
 
 	/**
 	 * Adds the project and returns success message
@@ -140,6 +148,7 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
 	/**
 	 * Suspends the project and returns success / failure message
 	 */
+	@Transactional
 	public String suspendProject(int projectID) {
 		Project project = projectRepository.findById(Long.valueOf(projectID)).orElse(null);
 		if (project != null) {
@@ -170,8 +179,15 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
 	/**
 	 * Returns list of tasks
 	 */
-	public List<Task> getTasks() {
-		return taskRepository.findAll();
+	public List<Task> getTasks(Long projectID) {
+		return taskRepository.findByProject(projectID);
+	}
+	
+	/**
+	 * Returns task
+	 */
+	public Task getTask(Long taskId) {
+		return taskRepository.findById(taskId).orElse(null);
 	}
 
 	/**
@@ -200,6 +216,7 @@ public class ProjectManagerServiceImpl implements ProjectManagerService {
 	/**
 	 * Ends the task and returns success / failure message
 	 */
+	@Transactional
 	public String endTask(int taskID) {
 		Task task = taskRepository.findById(Long.valueOf(taskID)).orElse(null);
 		if (task != null) {

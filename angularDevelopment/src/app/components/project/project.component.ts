@@ -8,6 +8,7 @@ import { projectMessages } from 'src/app/shared/messages/project.messages';
 import { User } from 'src/app/models/user.model';
 import { ModalPopupComponent } from 'src/app/shared/components/modal-popup/modal-popup.component';
 import { DateValidator } from 'src/app/shared/validators/DateValidator';
+import { ConfirmationPopupComponent } from "src/app/shared/components/confirmation-popup/confirmation-popup.component";
 
 @Component({
   selector: 'app-project',
@@ -24,6 +25,12 @@ export class ProjectComponent {
   editIndex: number;
   users: User[] = [];
   selectedUser: User;
+  //popup variables
+  popupmessage: string;
+  paramsArray: string[] = [];
+  // popup component
+  @ViewChild(ConfirmationPopupComponent)
+  private confirmPopup: ConfirmationPopupComponent;
   // popup variables
   popuptitle: string;
   // popup component
@@ -47,7 +54,7 @@ export class ProjectComponent {
   ngOnInit(): void {
       this.buildForm();
       this.getUsers();
-      this.getProjects();
+      this.getprojectsWithDetails();
       this.subscribeDateCheckInfo();
   }
 
@@ -71,15 +78,13 @@ export class ProjectComponent {
       });
 
       // listen to the search key value and filter the project details
-      //  wait for 500 ms to react
       this.projectForm.get("searchKey").valueChanges
-                   .pipe(debounceTime(300))
-                   .subscribe(key => {
-                      if(key) {
-                          this.projectDetails = this.projectDetails.filter(project => project.projectName.indexOf(key) != -1);  
-                      } else {
-                          this.projectDetails = this.projectDetailsCopy;
-                      }                        
+                      .subscribe(key => {
+                          if(key) {
+                              this.projectDetails = this.projectDetails.filter(project => project.projectName.indexOf(key) != -1);  
+                          } else {
+                              this.projectDetails = this.projectDetailsCopy;
+                          }                        
                    });
 
   }
@@ -93,6 +98,7 @@ export class ProjectComponent {
           // clear the earlier error
           this.formErrors[key] = '';
           // check whether user has changed any value
+          console.log(key,control.errors);
           if(control && (control.dirty || control.touched) && control.errors) {
             const messages = projectMessages[key];            
               for(const error in control.errors) {
@@ -118,9 +124,9 @@ export class ProjectComponent {
           });
   }
   
-  // method to get project details
-  getProjects() {
-      this.service.getProjects().subscribe(
+  // method to get project with task details
+  getprojectsWithDetails() {
+      this.service.getProjectsWithDetails().subscribe(
               (response) => {
                   this.projectDetails = response;
                   this.projectDetailsCopy = Object.assign([], this.projectDetails);
@@ -141,7 +147,7 @@ export class ProjectComponent {
         if(value) {
             // start date function
             this.projectForm.get("startDate").enable();
-            this.projectForm.get("startDate").reset(startDate);
+            this.isEdit ? '' : this.projectForm.get("startDate").reset(startDate);
             this.projectForm.get("startDate").setValidators([
                 Validators.required, DateValidator.date, DateValidator.minDate(new Date()) 
             ]);
@@ -149,7 +155,7 @@ export class ProjectComponent {
 
             // end date function
             this.projectForm.get("endDate").enable();
-            this.projectForm.get("endDate").reset(endDate);
+            this.isEdit ? '' : this.projectForm.get("endDate").reset(endDate);
             this.projectForm.get("endDate").setValidators([Validators.required, DateValidator.date]);
             this.projectForm.get("endDate").updateValueAndValidity();
         } else {
@@ -197,7 +203,7 @@ export class ProjectComponent {
               (response) => {
                  if(response['message']) {
                      this.successMessage = response['message'];
-                     this.getProjects();
+                     this.getprojectsWithDetails();
                  } else {
                     this.errorMessage =  response['error'];
                  }
@@ -232,20 +238,51 @@ export class ProjectComponent {
   
   // method to edit the project
   editProject(index: number): void {
+      this.isEdit= true;
       const projectInfo: Project  = this.projectDetails[index];
+
+      // find the manager name      
+      this.selectedUser = this.users.find( user => user.id == parseInt(projectInfo.manager));
+      
       this.projectForm.get("projectName").reset(projectInfo.projectName);
       this.projectForm.get("priority").reset(projectInfo.priority);
-      this.projectForm.get("manager").reset(projectInfo.manager);
+      this.projectForm.get("manager").reset(this.selectedUser.firstName + ' ' + this.selectedUser.lastName);
       this.projectForm.get('dateCheck').reset(projectInfo.startDate ? true : false);
-      this.projectForm.get('startDate').reset(projectInfo.startDate);
-      this.projectForm.get('endDate').reset(projectInfo.endDate);
-      this.isEdit= true;
-      this.editIndex= index;
+      this.projectForm.get('startDate').reset(this.getValidDate(projectInfo.startDate));
+      this.projectForm.get('endDate').reset(this.getValidDate(projectInfo.endDate));      
+      this.editIndex= projectInfo.id;
+  }
+  
+  // get valid date for HTML date field
+  getValidDate(date: any) {
+      let formattedDate = ''
+      if(date) {
+          formattedDate = date.split("T")[0];
+      }
+      return formattedDate;
   }
 
   // method to suspend the project
   suspendProject(index: number): void {
-
+      const projectInfo: Project  = this.projectDetails[index];
+      this.paramsArray = [];
+      this.popupmessage = 'project-suspend';
+      this.paramsArray.push((projectInfo.projectName).toUpperCase());
+    
+      // display the confirmation popup b4 suspending the project.
+      this.confirmPopup.showConfirmationPopup().then((result) => {
+          this.service.suspendProject(projectInfo.id).subscribe(
+              (response) => {
+                  if(response['message']) {
+                      this.successMessage = response['message'];
+                      this.getprojectsWithDetails();
+                  } else {
+                     this.errorMessage =  response['error'];
+                  }
+           })
+      }, (reason) => {
+          // user closed the popup by clicking cross or cancel button
+      })
   }
   
 }

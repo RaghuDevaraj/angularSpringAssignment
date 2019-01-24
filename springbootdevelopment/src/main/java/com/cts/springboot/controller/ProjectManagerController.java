@@ -92,6 +92,15 @@ public class ProjectManagerController {
 	public ResponseEntity<Response> getProjects() {
 		return ResponseEntity.ok().body(new Response(null, pmService.getProjects(), null));
 	}
+	
+	/**
+	 * GET Method to retrieve the projects with task details
+	 * @return list of projects
+	 */
+	@GetMapping("/projectsWithDetails")
+	public ResponseEntity<Response> getProjectsWithDetails() {
+		return ResponseEntity.ok().body(new Response(null, pmService.getProjectWithDetails(), null));
+	}
 
 	/**
 	 * POST Method to save the project
@@ -154,9 +163,18 @@ public class ProjectManagerController {
 	 * GET Method to retrieve the tasks
 	 * @return list of tasks
 	 */
-	@GetMapping("/tasks")
-	public ResponseEntity<Response> getTasks() {
-		return ResponseEntity.ok().body(new Response(null, pmService.getTasks(), null));
+	@GetMapping("/tasks/{projectID}")
+	public ResponseEntity<Response> getTasks(@PathVariable Long projectID) {
+		return ResponseEntity.ok().body(new Response(null, pmService.getTasks(projectID), null));
+	}
+	
+	/**
+	 * GET Method to retrieve the task details
+	 * @return task
+	 */
+	@GetMapping("/task/{taskID}")
+	public ResponseEntity<Response> getTaskDetails(@PathVariable Long taskID) {
+		return ResponseEntity.ok().body(new Response(null, pmService.getTask(taskID), null));
 	}
 
 	/**

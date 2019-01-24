@@ -5,6 +5,8 @@ import { ProjectManagerService } from "src/app/services/project-manager.service"
 import { ModalPopupComponent } from "src/app/shared/components/modal-popup/modal-popup.component";
 import { Project } from "src/app/models/project.model";
 import { FormGroup, FormControl } from "@angular/forms";
+import { ConfirmationPopupComponent } from "src/app/shared/components/confirmation-popup/confirmation-popup.component";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-view-task',
@@ -22,29 +24,83 @@ export class ViewTaskComponent {
     //popup component
     @ViewChild(ModalPopupComponent)
     private popup: ModalPopupComponent;
+    // message
+    message: string;
+    successMessage: string;
+    errorMessage: string;
+    //popup variables
+    popupmessage: string;
+    paramsArray: string[] = [];
+    // popup component
+    @ViewChild(ConfirmationPopupComponent)
+    private confirmPopup: ConfirmationPopupComponent;
     
     // dependecy injection
-    constructor(private service: ProjectManagerService){
-        this.projects.push(new Project("1","Anthem",5,3,"","",4,"",));
-        this.projects.push(new Project("2","Aetna",6,1,"","",1,""));
-        this.projects.push(new Project("3","Toyota",4,0,"","",2,""));
-        this.projects.push(new Project("4","Cigna",4,1,"","",3,""));
-        
+    constructor(private service: ProjectManagerService, private router: Router){
+        // load the projects
+        this.service.getProjects().subscribe(
+                    (response) => {
+                        this.projects = response;
+                    }
+                );      
+        // build the form
         this.viewTaskForm = new FormGroup({
             projectName: new FormControl()
-        });
-    }
-    
- // search project
+        });        
+    }    
+      
+    // search project
     searchProject(): void {        
         // display the project details in modal poup
         this.popup.showConfirmationPopup().then( (result) => {
-            const projectInfo = this.projects.find( (project) => project.id == result);
+            const projectInfo = this.projects.find( (project) => project.id == parseInt(result));
             this.viewTaskForm.get("projectName").reset(projectInfo.projectName);
-            this.taskArray.push(new Task("1","2","Component task",false,10,"1","10/03/2018","10/05/2018","1","In Progress"));
+            this.getTasks(result);
         }, (reason) =>{
 
         });
+    }
+    
+    // Get the tasks for the project
+    getTasks(projectID: any): void {
+        this.message = "";      
+        this.service.getTasks(projectID).subscribe( (response) => {
+            this.taskArray = response;
+            if(this.taskArray.length == 0) {
+                this.message = "No tasks found."
+            }
+        })
+    }
+
+    
+    // end the task - set the status to complete
+    endTask(index: number): void {
+        const taskInfo: Task  = this.taskArray[index];
+        this.paramsArray = [];
+        this.popupmessage = 'end-task';
+        this.paramsArray.push((taskInfo.taskName).toUpperCase());
+      
+        // display the confirmation popup b4 suspending the project.
+        this.confirmPopup.showConfirmationPopup().then((result) => {
+            this.successMessage = "";
+            this.errorMessage = "";
+            this.service.endTask(taskInfo.taskID).subscribe(
+                (response) => {
+                    if(response['message']) {
+                        this.successMessage = response['message'];
+                        this.getTasks(taskInfo.projectID);
+                    } else {
+                       this.errorMessage =  response['error'];
+                    }
+             })
+        }, (reason) => {
+            // user closed the popup by clicking cross or cancel button
+        })
+    }
+    
+    // edit task
+    editTask(taskID: number): void {
+        this.router.navigateByUrl("/addTask?editTask="+taskID);
     }
 
   

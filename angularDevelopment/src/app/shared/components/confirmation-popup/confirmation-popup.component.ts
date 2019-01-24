@@ -43,13 +43,17 @@ export class ConfirmationPopupComponent implements OnChanges {
 // headers to the popup
 export const headers = () => {
     return {
-        'user-delete' : 'User Deletion'
+        'user-delete' : 'User Deletion',
+        'project-suspend' : 'Project Suspension',
+        'end-task' : 'End Task',
     }
 }    
 
 // messages to the popup
 export const messages = (params) => {
     return {
-        'user-delete' : `You are about to delete the user - ${params[0]}. Do you want to proceed?`
+        'user-delete' : `You are about to delete the user - ${params[0]}. Do you want to proceed?`,
+        'project-suspend': `You are about to suspend the project - ${params[0]}. Do you want to proceed?`,
+        'end-task' : `You are about to end the task - ${params[0]}. Do you want to proceed?`
     }
 }

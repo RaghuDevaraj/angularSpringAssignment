@@ -18,6 +18,8 @@ public interface ProjectManagerService {
 	String deleteUser(int userID);
 
 	List<Project> getProjects();
+	
+	List<Project> getProjectWithDetails();
 
 	String addProject(Project project);
 
@@ -29,12 +31,14 @@ public interface ProjectManagerService {
 
 	String addParentTask(ParentTask parentTask);
 
-	List<Task> getTasks();
+	List<Task> getTasks(Long projectID);
 
 	String addTask(Task task);
 
 	String updateTask(Task task);
 
 	String endTask(int taskID);
+
+	Task getTask(Long taskID);
 
 }

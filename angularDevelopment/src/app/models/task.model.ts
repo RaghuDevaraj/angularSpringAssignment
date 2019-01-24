@@ -1,6 +1,6 @@
 export class Task {
     constructor(
-            public taskID: string,
+            public taskID: number,
             public projectID: string,
             public taskName: string,
             public isParentTask: boolean,
