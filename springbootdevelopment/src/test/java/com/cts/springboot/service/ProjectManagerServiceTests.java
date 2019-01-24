@@ -171,9 +171,9 @@ public class ProjectManagerServiceTests {
 		List<Task> tasks = new ArrayList<Task>();
 		tasks.add(new Task(1L, "Create validation for taskName field", 3, df.parse("2019-02-01"), df.parse("2019-02-03"), "O"));
 		tasks.add(new Task(2L, "Create validation for priority field", 2, df.parse("2019-02-01"), df.parse("2019-02-03"), "O"));
-		given(taskRepository.findAll()).willReturn(tasks);
+		given(taskRepository.findByProject(anyLong())).willReturn(tasks);
 
-		List<Task> taskDetails = projectManagerService.getTasks();
+		List<Task> taskDetails = projectManagerService.getTasks(1L);
 
 		assertThat(taskDetails.get(0).getTaskName()).isEqualTo("Create validation for taskName field");
 		assertThat(taskDetails.get(1).getPriority()).isEqualTo(2);
