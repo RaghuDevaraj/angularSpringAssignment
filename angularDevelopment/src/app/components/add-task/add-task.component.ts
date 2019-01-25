@@ -278,7 +278,7 @@ export class AddTaskComponent {
                     (response) => {
                         if(response['message']) {
                             this.successMessage = response['message'];
-                            this.getProjects();
+                            this.getParentTasks();
                         } else {
                            this.errorMessage =  response['error'];
                         }
